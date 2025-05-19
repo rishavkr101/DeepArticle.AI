@@ -28,21 +28,22 @@ st.set_page_config(
 
 import streamlit as st
 
-aws_access_key_id = st.secrets["aws"]["aws_access_key_id"]
-aws_secret_access_key = st.secrets["aws"]["aws_secret_access_key"]
-
 def setup_aws_credentials():
     try:
-       
-        session = boto3.Session()
+        # Use the secrets in your session creation
+        session = boto3.Session(
+            aws_access_key_id=st.secrets["aws"]["aws_access_key_id"],
+            aws_secret_access_key=st.secrets["aws"]["aws_secret_access_key"],
+            region_name='us-east-1'  # Specify default region here
+        )
         
-      
+        # Test the credentials
         sts = session.client('sts')
         identity = sts.get_caller_identity()
         
         st.sidebar.success(f"AWS authenticated as: {identity['Arn']}")
         
-      
+        # Create Bedrock runtime client
         bedrock_runtime = session.client(
             service_name='bedrock-runtime',
             region_name='us-east-1'
@@ -51,7 +52,7 @@ def setup_aws_credentials():
         return bedrock_runtime
     except Exception as e:
         st.sidebar.error(f"AWS credentials error: {str(e)}")
-        st.sidebar.error("Please check your AWS CLI configuration")
+        st.sidebar.error("Please check your AWS credentials in Streamlit secrets")
         return None
 
 
