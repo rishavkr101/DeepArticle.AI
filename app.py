@@ -25,6 +25,12 @@ st.set_page_config(
     layout="wide"
 )
 
+
+import streamlit as st
+
+aws_access_key_id = st.secrets["aws"]["aws_access_key_id"]
+aws_secret_access_key = st.secrets["aws"]["aws_secret_access_key"]
+
 def setup_aws_credentials():
     try:
        
