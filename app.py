@@ -34,7 +34,8 @@ def setup_aws_credentials():
         session = boto3.Session(
             aws_access_key_id=st.secrets["aws"]["aws_access_key_id"],
             aws_secret_access_key=st.secrets["aws"]["aws_secret_access_key"],
-            region_name='us-east-1'  # Specify default region here
+            region_name='us-east-1',
+            bedrock_region = st.secrets["aws"]["bedrock_region"]
         )
         
         # Test the credentials
