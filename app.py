@@ -322,7 +322,7 @@ st.subheader("Upload article links and ask questions powered by AWS Bedrock")
 # Sidebar for URL input
 with st.sidebar:
     st.header("Article Source")
-    article_url = st.text_input("Enter the URL of an equity-related article:", key="url_input")
+    article_url = st.text_input("Enter the URL of an article:", key="url_input")
     
     if st.button("Load Article"):
         if article_url:
