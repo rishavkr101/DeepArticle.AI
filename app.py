@@ -263,7 +263,7 @@ def query_with_vector_store(vector_store, question):
 
 # Original Bedrock query function (as fallback)
 def query_bedrock(article_content, question, model_id="anthropic.claude-3-sonnet-20240229-v1:0"):
-    client = init_bedrock_client()
+    client = setup_aws_credentials()
     if not client:
         return "AWS Bedrock client initialization failed. Check your credentials."
     
