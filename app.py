@@ -254,7 +254,7 @@ def query_bedrock(article_content, question,bedrock_client, model_id="anthropic.
     
     if not bedrock_client:
         return "AWS Bedrock client initialization failed. Check your credentials."
-    client = bedrock_client +
+    client = bedrock_client
     
     try:
         # Format the prompt for Claude
