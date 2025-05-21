@@ -28,6 +28,7 @@ st.set_page_config(
 
 import streamlit as st
 
+st.write("Using key:", st.secrets["aws"]["aws_access_key_id"])
 
 
 def setup_aws_credentials():
@@ -77,7 +78,6 @@ if 'article_chunks' not in st.session_state:
     st.session_state.article_chunks = []
 
 bedrock_client = setup_aws_credentials()
-st.write("Using key:", st.secrets["aws"]["aws_access_key_id"])
 
 
 # Initializing bedrock embeddings
