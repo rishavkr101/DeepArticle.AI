@@ -360,7 +360,7 @@ with col2:
     st.header("Ask Questions About the Article")
     
     if st.session_state.article_content:
-        user_question = st.text_input("Ask a question about the article:", placeholder="What are the key insights about this equity?")
+        user_question = st.text_input("Ask a question about the article:", placeholder="What are the key insights about this article?")
         
         if st.button("Get Answer") and user_question:
             with st.spinner("Analyzing the article..."):
