@@ -76,19 +76,8 @@ if 'article_vector_store' not in st.session_state:
 if 'article_chunks' not in st.session_state:
     st.session_state.article_chunks = []
 
-# AWS clients setup
-def init_bedrock_client():
-    try:
-        #getting credentials from config
-        bedrock_runtime = boto3.client(
-            service_name='bedrock-runtime',
-            region_name=os.environ.get('AWS_REGION', 'us-east-1')
-        )
-        return bedrock_runtime
-    except Exception as e:
-        st.error(f"Error initializing AWS Bedrock client: {str(e)}")
-        st.info("Please ensure your AWS credentials are properly configured.")
-        return None
+bedrock_client = setup_aws_credentials()
+
 
 # Initializing bedrock embeddings
 def init_bedrock_embeddings():
