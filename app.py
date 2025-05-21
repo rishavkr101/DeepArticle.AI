@@ -28,7 +28,6 @@ st.set_page_config(
 
 import streamlit as st
 
-st.write("Using key:", st.secrets["aws"]["aws_access_key_id"])
 
 
 def setup_aws_credentials():
