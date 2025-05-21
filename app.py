@@ -30,12 +30,6 @@ import streamlit as st
 
 
 
-# TEMPORARY DEBUG CODE - REMOVE AFTER FIXING
-st.write("Available secret keys:", list(st.secrets.keys()))
-if "aws" in st.secrets:
-    st.write("AWS secret keys:", list(st.secrets["aws"].keys()))
-# END TEMPORARY DEBUG CODE
-
 def setup_aws_credentials():
     try:
         # Check if AWS credentials are in secrets
