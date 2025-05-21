@@ -251,9 +251,10 @@ def query_with_vector_store(vector_store, question,bedrock_client):
 
 # Original Bedrock query function (as fallback)
 def query_bedrock(article_content, question,bedrock_client, model_id="anthropic.claude-3-sonnet-20240229-v1:0"):
-    client = setup_aws_credentials()
+    
     if not bedrock_client:
         return "AWS Bedrock client initialization failed. Check your credentials."
+    client = bedrock_client +
     
     try:
         # Format the prompt for Claude
@@ -324,7 +325,7 @@ with st.sidebar:
                             
                             # Creating vector store
                             with st.spinner("Creating vector embeddings for semantic search..."):
-                                vector_store = create_vector_store(article_text, article_url)
+                                vector_store = create_vector_store(article_text, article_url,bedrock_client)
                                 if vector_store:
                                     st.session_state.article_vector_store = vector_store
                                     st.success(f"Article loaded and vectorized successfully! ({len(article_text)} characters, {len(st.session_state.article_chunks)} chunks)")
@@ -378,10 +379,10 @@ with col2:
             with st.spinner("Analyzing the article..."):
                 if st.session_state.article_vector_store:
                     # Use vector store for semantic search and retrieval
-                    answer = query_with_vector_store(st.session_state.article_vector_store, user_question)
+                    answer = query_with_vector_store(st.session_state.article_vector_store, user_question,bedrock_client)
                 else:
                     # Fallback to direct querying
-                    answer = query_bedrock(st.session_state.article_content, user_question)
+                    answer = query_bedrock(st.session_state.article_content, user_question,bedrock_client)
                 
                 # Add to chat history
                 st.session_state.chat_history.append({"question": user_question, "answer": answer})
