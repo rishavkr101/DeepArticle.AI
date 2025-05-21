@@ -81,13 +81,8 @@ bedrock_client = setup_aws_credentials()
 
 
 # Initializing bedrock embeddings
-def init_bedrock_embeddings():
+def init_bedrock_embeddings(bedrock_client):
     try:
-        bedrock_client = boto3.client(
-            service_name='bedrock-runtime',
-            region_name=os.environ.get('AWS_REGION', 'us-east-1')
-        )
-        
         embeddings = BedrockEmbeddings(
             client=bedrock_client,
             model_id="amazon.titan-embed-text-v2:0"
@@ -98,17 +93,10 @@ def init_bedrock_embeddings():
         return None
 
 # Initializing LLM
-def init_llm():
+def init_llm(bedrock_client):
     try:
-        bedrock_client = boto3.client(
-            service_name='bedrock-runtime',
-            region_name=os.environ.get('AWS_REGION', 'us-east-1')
-        )
-        
-        # Initializing callback manager for streaming
         callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
         
-        # Initializing the Bedrock LLM
         llm = BedrockChat(
             client=bedrock_client,
             model_id="anthropic.claude-3-sonnet-20240229-v1:0",
