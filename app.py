@@ -148,7 +148,7 @@ def extract_text_from_url(url):
         return f"Error extracting text from URL: {str(e)}"
 
 # Function to chunk text and create vector store
-def create_vector_store(text, url):
+def create_vector_store(text, url, bedrock_client):
     try:
         # Split text into chunks
         text_splitter = RecursiveCharacterTextSplitter(
@@ -174,7 +174,7 @@ def create_vector_store(text, url):
         st.session_state.article_chunks = chunk_docs
         
         # Get embeddings
-        embeddings = init_bedrock_embeddings()
+        embeddings = init_bedrock_embeddings(bedrock_client)
         if not embeddings:
             return None
         
@@ -189,9 +189,9 @@ def create_vector_store(text, url):
         return None
 
 # Function to query using vector store
-def query_with_vector_store(vector_store, question):
+def query_with_vector_store(vector_store, question,bedrock_client):
     try:
-        llm = init_llm()
+        llm = init_llm(bedrock_client)
         if not llm:
             return "Error initializing LLM. Check your AWS credentials."
         
@@ -251,9 +251,9 @@ def query_with_vector_store(vector_store, question):
         return f"Error querying vector store: {str(e)}"
 
 # Original Bedrock query function (as fallback)
-def query_bedrock(article_content, question, model_id="anthropic.claude-3-sonnet-20240229-v1:0"):
+def query_bedrock(article_content, question,bedrock_client, model_id="anthropic.claude-3-sonnet-20240229-v1:0"):
     client = setup_aws_credentials()
-    if not client:
+    if not bedrock_client:
         return "AWS Bedrock client initialization failed. Check your credentials."
     
     try:
