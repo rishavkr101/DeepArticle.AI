@@ -30,11 +30,16 @@ import streamlit as st
 
 def setup_aws_credentials():
     try:
+        # Check if AWS credentials are in secrets
+        if "aws" not in st.secrets or "aws_access_key_id" not in st.secrets["aws"]:
+            st.sidebar.error("AWS credentials not found in secrets")
+            return None
+            
         # Use the secrets in your session creation
         session = boto3.Session(
             aws_access_key_id=st.secrets["aws"]["aws_access_key_id"],
             aws_secret_access_key=st.secrets["aws"]["aws_secret_access_key"],
-            AWS_REGION = "us-east-1"
+            region_name="us-east-1"  # Fixed parameter name
         )
         
         # Test the credentials
@@ -52,9 +57,9 @@ def setup_aws_credentials():
         return bedrock_runtime
     except Exception as e:
         st.sidebar.error(f"AWS credentials error: {str(e)}")
+        st.error(f"Full error details: {repr(e)}")  # Add more detailed error info
         st.sidebar.error("Please check your AWS credentials in Streamlit secrets")
         return None
-
 
 
 # Initialize the session state variables if they don't exist
