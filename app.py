@@ -32,23 +32,19 @@ import streamlit as st
 
 def setup_aws_credentials():
     try:
-        # Check if AWS credentials are in secrets
-        if "aws" not in st.secrets or "aws_access_key_id" not in st.secrets["aws"]:
-            st.sidebar.error("AWS credentials not found in secrets")
-            return None
+       
             
-        # Use the secrets in your session creation
+        # secrets in your session creation
         session = boto3.Session(
             aws_access_key_id=st.secrets["aws"]["aws_access_key_id"],
             aws_secret_access_key=st.secrets["aws"]["aws_secret_access_key"],
-            region_name="us-east-1"  # Fixed parameter name
+            region_name="us-east-1"  
         )
         
         # Test the credentials
         sts = session.client('sts')
         identity = sts.get_caller_identity()
         
-        st.sidebar.success(f"AWS authenticated as: {identity['Arn']}")
         
         # Create Bedrock runtime client
         bedrock_runtime = session.client(
@@ -59,7 +55,7 @@ def setup_aws_credentials():
         return bedrock_runtime
     except Exception as e:
         st.sidebar.error(f"AWS credentials error: {str(e)}")
-        st.error(f"Full error details: {repr(e)}")  # Add more detailed error info
+        st.error(f"Full error details: {repr(e)}") 
         st.sidebar.error("Please check your AWS credentials in Streamlit secrets")
         return None
 
@@ -202,9 +198,9 @@ def query_with_vector_store(vector_store, question,bedrock_client):
         
         # Create prompt template
         template = """
-        You are an equity research assistant analyzing financial articles.
+        You are an  research assistant analyzing the articles.
         
-        Use the following context from an equity-related article to answer the question.
+        Use the following context from an article to answer the question.
         If you don't know the answer based on the context, say that you don't know.
         
         Context:
@@ -234,16 +230,7 @@ def query_with_vector_store(vector_store, question,bedrock_client):
         
         # Extract answer and source documents
         answer = response["result"]
-        source_docs = response.get("source_documents", [])
-        
-        # Format source information if available
-        if source_docs:
-            source_info = "\n\nSources:\n"
-            for i, doc in enumerate(source_docs):
-                chunk_num = doc.metadata.get("chunk", "Unknown")
-                source_info += f"- Chunk {chunk_num} from article\n"
-            answer += source_info
-            
+
         return answer
         
     except Exception as e:
@@ -259,7 +246,7 @@ def query_bedrock(article_content, question,bedrock_client, model_id="anthropic.
     try:
         # Format the prompt for Claude
         prompt = f"""
-        You are an equity research assistant analyzing financial articles.
+        You are an research assistant analyzing articles.
         
         Here is an article:
         ---
